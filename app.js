@@ -75,7 +75,7 @@ function notifications(){const msgs=[];const appts=db.appointments.filter(a=>isE
  for(const a of appts){const s=getSlot(a);if(!s)continue;const ms=new Date(s.start).getTime()-now;if(a.status==='confirmed'&&ms>0&&ms<=48*HOUR)msgs.push({title:'Promemoria lezione',body:`${dogName(getDog(a.dogId))}: ${fmtDateTime(s.start)}.`,go:'appointments'});if(a.payment==='unpaid'&&['confirmed','completed'].includes(a.status)&&ms<=24*HOUR)msgs.push({title:'Pagamento da verificare',body:`${dogName(getDog(a.dogId))}: ${euro(s.fee)}.`,go:'appointments'})}
  return msgs.slice(0,7)
 }
-function sidebar(){let items=navItems(),req=db.appointments.filter(a=>a.status==='requested').length;return `<aside class="sidebar"><div class="brand"><div class="brand-logo">🐾</div><div><b>Percorso Cane</b><small>Educazione cinofila</small></div></div><div class="side-label">Area ${isEducator()?'professionista':'cliente'}</div><div class="navwrap">${items.map((x,i)=>`<button class="navbtn ${ui.view===x.id||ui.view==='dog'&&x.id==='dogs'?'active':''} ${i>5?'mobile-extra':''}" data-nav="${x.id}"><span class="nav-ico">${x.icon}</span><span>${x.label}</span>${x.id==='appointments'&&req&&isEducator()?`<span class="count">${req}</span>`:''}</button>`).join('')}</div><div class="side-bottom"><div class="mode"><p>Modalità di visualizzazione</p><select id="role-switch" aria-label="Area applicazione"><option value="educator" ${isEducator()?'selected':''}>Educatore (demo)</option><option value="client" ${!isEducator()?'selected':''}>Cliente (demo)</option></select>${!isEducator()&&db.clients.length?`<select id="client-switch" style="margin-top:8px" aria-label="Cliente">${db.clients.map(c=>`<option value="${esc(c.id)}" ${c.id===ui.clientId?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}</div><div class="sidebar-foot">Versione 1.0.4 · Demo locale<br>Dati salvati solo nel dispositivo</div></div></aside>`}
+function sidebar(){let items=navItems(),req=db.appointments.filter(a=>a.status==='requested').length;return `<aside class="sidebar"><div class="brand"><div class="brand-logo">🐾</div><div><b>Percorso Cane</b><small>Educazione cinofila</small></div></div><div class="side-label">Area ${isEducator()?'professionista':'cliente'}</div><div class="navwrap">${items.map((x,i)=>`<button class="navbtn ${ui.view===x.id||ui.view==='dog'&&x.id==='dogs'?'active':''} ${i>5?'mobile-extra':''}" data-nav="${x.id}"><span class="nav-ico">${x.icon}</span><span>${x.label}</span>${x.id==='appointments'&&req&&isEducator()?`<span class="count">${req}</span>`:''}</button>`).join('')}</div><div class="side-bottom"><div class="mode"><p>Modalità di visualizzazione</p><select id="role-switch" aria-label="Area applicazione"><option value="educator" ${isEducator()?'selected':''}>Educatore (demo)</option><option value="client" ${!isEducator()?'selected':''}>Cliente (demo)</option></select>${!isEducator()&&db.clients.length?`<select id="client-switch" style="margin-top:8px" aria-label="Cliente">${db.clients.map(c=>`<option value="${esc(c.id)}" ${c.id===ui.clientId?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:''}</div><div class="sidebar-foot">Versione 1.0.5 · Demo locale<br>Dati salvati solo nel dispositivo</div></div></aside>`}
 function topbar(){return `<header class="topbar"><div><div class="bread"><span class="mobile-brand">Percorso Cane · </span>${isEducator()?'Area professionista':'Area cliente'} / ${appTitle()}</div><h1 class="page-title">${appTitle()}</h1></div><div class="top-right"><button class="btn small role-top" data-toggle-role title="Cambia area demo">${isEducator()?'👤 Cliente':'🧑‍🏫 Educatore'}</button><span class="indicator">● Archiviazione locale</span><div class="top-user"><span>${isEducator()?'Professionista':'Cliente demo'}</span><div class="avatar">${isEducator()?'EC':'CL'}</div></div></div></header>`}
 function demoBanner(){return `<div class="demo-banner"><b>Prototipo locale 1.0.</b> I dati e i cambi di ruolo sono visibili soltanto in questo browser: non esistono account separati, sincronizzazione, incassi né notifiche push. Utilizza solo dati fittizi per il collaudo.</div>`}
 function metrics(label,value,icon,sub,destination,filter){return `<button class="metric metric-link" type="button" data-nav="${destination}" ${filter?`data-dashboard-filter="${filter}"`:``} title="Apri ${esc(label)}"><div class="metric-top"><span>${esc(label)}</span><span class="metric-symbol">${icon}</span></div><strong>${value}</strong><small>${esc(sub)}</small></button>`}
@@ -111,7 +111,7 @@ function renderGoals(){const d=chosenDog();const goals=goalsForDog(d),avg=goals.
 function renderChart(checkins){const sorted=checkins.slice().sort((a,b)=>a.week.localeCompare(b.week)).slice(-8);return sorted.length?`<div class="chart-wrap"><div class="chart">${sorted.map(c=>`<div class="chart-item"><strong>${Number(c.score)}/5</strong><div class="bar" style="height:${Number(c.score)*18}%"></div><label>${fmtDate(c.week).replace(/ \d{4}/,'')}</label></div>`).join('')}</div></div>`:empty('Non sono ancora presenti rilevazioni settimanali.')}
 function renderProgress(){const d=chosenDog();if(!d)return empty('Nessun cane selezionato.');const checks=db.checkins.filter(c=>c.dogId===d.id).sort((a,b)=>b.week.localeCompare(a.week));return `<div class="sectionhead"><div><h2>Andamento settimanale</h2><p>Autovalutazione indicativa da 1 (settimana difficile) a 5 (settimana serena).</p></div><div class="actions">${dogSwitcher()}<button class="btn primary" data-modal="checkin">+ Registra settimana</button></div></div><div class="twocol"><div class="panel"><h3>Andamento di ${esc(dogName(d))}</h3>${renderChart(checks)}<p class="footer-hint">I valori sono soggettivi, non equivalgono a una diagnosi né a una misura clinica.</p></div><div class="panel"><h3>Ultime rilevazioni</h3>${checks.length?checks.slice(0,5).map(c=>`<div class="list-row"><div class="avatar">${c.score}/5</div><div class="grow"><b>Settimana del ${fmtDate(c.week)}</b><small>${esc(c.notes||'Nessuna osservazione')}</small>${c.homework?`<small>Da approfondire: ${esc(c.homework)}</small>`:''}</div></div>`).join(''):empty('Nessuna rilevazione salvata.')}</div></div>`}
 function renderJournal(){const dogs=myDogs(),entry=db.journal.filter(j=>dogs.some(d=>d.id===j.dogId)&&(isEducator()||j.share)).sort((a,b)=>b.date.localeCompare(a.date));return `<div class="sectionhead"><div><h2>Registro delle attività</h2><p>${isEducator()?'Documenta cosa è stato fatto, cosa pianificare e le difficoltà osservate.':'Riepiloghi delle lezioni condivisi dal professionista.'}</p></div>${isEducator()?`<div class="actions">${dogSwitcher()}<button class="btn primary" data-modal="journal">+ Nota di lezione</button></div>`:dogSwitcher()}</div><div class="panel"><div class="timeline">${entry.length?entry.map(j=>`<div class="timeline-item"><small>${fmtDate(j.date)} · ${esc(dogName(getDog(j.dogId)))}</small><h4>Attività svolte</h4><p>${esc(j.activity||'Non indicate')}</p>${j.next?`<h4>Da lavorare alla prossima sessione</h4><p>${esc(j.next)}</p>`:''}${j.difficulty?`<h4>Difficoltà osservate</h4><p>${esc(j.difficulty)}</p>`:''}${isEducator()&&j.privateNote?`<div class="alert"><strong>Nota interna · non condivisa nell’area cliente</strong>${esc(j.privateNote)}</div>`:''}<span class="pill ${j.share?'':'orange'}">${j.share?'Riepilogo condivisibile':'Solo professionista'}</span></div>`).join(''):empty('Non sono ancora disponibili note di lezione.')}</div></div>`}
-function renderSettings(){return `<div class="sectionhead"><div><h2>Configurazione e backup</h2><p>Versione dimostrativa · archiviazione locale nel browser</p></div><span class="pill">v1.0.4</span></div><div class="settings-grid"><div class="panel"><h3>💾 Esporta i dati</h3><p class="note">Salva un archivio JSON contenente clienti, schede canine, appuntamenti, progressi e diario. Il backup non è cifrato: custodiscilo con attenzione.</p><button class="btn primary" data-action="export">Scarica backup JSON</button></div><div class="panel"><h3>↥ Importa backup</h3><p class="note">Ripristina un file JSON creato con questa app. I dati attuali saranno sostituiti; esporta prima una copia.</p><div class="field"><label for="backup-file">Scegli un file di backup</label><input id="backup-file" type="file" accept=".json,application/json"></div></div><div class="panel"><h3>📋 Stampa / salva PDF</h3><p class="note">Per ottenere una copia della schermata corrente, usa la funzione di stampa del browser. Per ora non è disponibile un referto strutturato.</p><button class="btn" data-action="print">Stampa schermata</button></div><div class="panel"><h3>↺ Ripristina dati demo</h3><p class="note">Sostituisce tutti i dati locali con i profili fittizi di collaudo.</p><button class="btn danger" data-action="reset">Ripristina esempio</button></div></div><div class="panel" style="margin-top:17px"><h3>Prima di usare l’app con clienti reali</h3><p class="note">Questa versione <b>non offre autenticazione, autorizzazioni, cifratura applicativa, audit log, sincronizzazione né garanzie di conservazione</b>. I dettagli su salute, famiglia e note sulle persone possono contenere dati personali e informazioni particolarmente delicate. Per un servizio operativo servono server protetto, ruoli separati e verificati, informative privacy e misure tecniche e organizzative adeguate.</p><p class="note">Le regole di prenotazione usano l’ora di questo dispositivo. Per prevenire elusioni e prenotazioni concorrenti, la validazione deve passare a un server.</p></div>`}
+function renderSettings(){return `<div class="sectionhead"><div><h2>Configurazione e backup</h2><p>Versione dimostrativa · archiviazione locale nel browser</p></div><span class="pill">v1.0.5</span></div><div class="settings-grid"><div class="panel"><h3>💾 Esporta i dati</h3><p class="note">Salva un archivio JSON contenente clienti, schede canine, appuntamenti, progressi e diario. Il backup non è cifrato: custodiscilo con attenzione.</p><button class="btn primary" data-action="export">Scarica backup JSON</button></div><div class="panel"><h3>↥ Importa backup</h3><p class="note">Ripristina un file JSON creato con questa app. I dati attuali saranno sostituiti; esporta prima una copia.</p><div class="field"><label for="backup-file">Scegli un file di backup</label><input id="backup-file" type="file" accept=".json,application/json"></div></div><div class="panel"><h3>📋 Stampa / salva PDF</h3><p class="note">Per ottenere una copia della schermata corrente, usa la funzione di stampa del browser. Per ora non è disponibile un referto strutturato.</p><button class="btn" data-action="print">Stampa schermata</button></div><div class="panel"><h3>↺ Ripristina dati demo</h3><p class="note">Sostituisce tutti i dati locali con i profili fittizi di collaudo.</p><button class="btn danger" data-action="reset">Ripristina esempio</button></div></div><div class="panel" style="margin-top:17px"><h3>Prima di usare l’app con clienti reali</h3><p class="note">Questa versione <b>non offre autenticazione, autorizzazioni, cifratura applicativa, audit log, sincronizzazione né garanzie di conservazione</b>. I dettagli su salute, famiglia e note sulle persone possono contenere dati personali e informazioni particolarmente delicate. Per un servizio operativo servono server protetto, ruoli separati e verificati, informative privacy e misure tecniche e organizzative adeguate.</p><p class="note">Le regole di prenotazione usano l’ora di questo dispositivo. Per prevenire elusioni e prenotazioni concorrenti, la validazione deve passare a un server.</p></div>`}
 function modalContents(){const d=chosenDog(),m=ui.modal;if(!m)return '';let title='',sub='',body='';
  if(m==='client'){title='Nuovo cliente';sub='Crea un nucleo familiare prima di associare un cane.';body=`<form id="create-client"><div class="grid-form">${fieldsHtml([field('name','Nome e cognome'),field('email','Email'),field('phone','Telefono')])}</div><div class="formactions"><button class="btn primary" type="submit">Crea cliente</button></div></form>`}
  if(m==='dog'){title='Nuova scheda cane';sub='Associa il cane a un cliente: il resto della scheda sarà compilabile dopo il salvataggio.';body=`<form id="create-dog"><div class="grid-form"><div class="field"><label for="new-client">Cliente *</label><select id="new-client" name="clientId" required>${db.clients.map(c=>`<option value="${c.id}" ${c.id===ui.clientId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div><div class="field"><label for="new-dog-name">Nome del cane *</label><input id="new-dog-name" name="name" maxlength="100" required></div><div class="field"><label for="new-dog-breed">Razza / mix</label><input id="new-dog-breed" name="breed" maxlength="100"></div></div><div class="formactions"><button class="btn primary" type="submit">Crea scheda</button></div></form>`}
@@ -123,9 +123,83 @@ function modalContents(){const d=chosenDog(),m=ui.modal;if(!m)return '';let titl
  if(m==='photo'){title='Foto del cane';sub='L’immagine viene ridimensionata per non saturare rapidamente la memoria locale.';body=`<div class="field"><label for="dog-photo-file">Seleziona un’immagine JPG, PNG o WEBP</label><input type="file" id="dog-photo-file" accept="image/jpeg,image/png,image/webp"></div>${d?.photo?`<div class="formactions"><button class="btn danger" data-action="remove-photo">Rimuovi foto</button></div>`:''}`}
  if(!title)return '';return `<div class="modalback" id="modalback"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-title"><div><h2>${title}</h2><p>${sub}</p></div><button class="close" data-close aria-label="Chiudi">×</button></div>${body}</div></div>`
 }
+
+/* Keep the selected dog-section tab visible after each template render. */
+function alignSelectedDogTab(){
+ if(ui.view!=='dog')return;
+ const strip=document.querySelector('.tabs');
+ const selected=strip?.querySelector('.tab.active');
+ if(!strip||!selected)return;
+ const outer=strip.getBoundingClientRect();
+ const inner=selected.getBoundingClientRect();
+ const left=strip.scrollLeft+inner.left-outer.left;
+ const desired=left-(strip.clientWidth-inner.width)/2;
+ const maxLeft=Math.max(0,strip.scrollWidth-strip.clientWidth);
+ strip.scrollLeft=Math.min(maxLeft,Math.max(0,desired));
+}
+
+/* iOS Safari uses a smaller visual viewport while the keyboard is on screen.
+   Scroll only the focused field into the visible area, leaving native pinch zoom intact. */
+function isEditableField(node){
+ return node instanceof HTMLElement &&
+   node.matches('textarea,select,input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="hidden"]):not([type="button"]):not([type="submit"])');
+}
+let inputViewportFrame=0;
+function updateInputViewport(){
+ if(window.innerWidth>720){
+  document.body.classList.remove('is-editing');
+  document.documentElement.style.removeProperty('--keyboard-inset');
+  return;
+ }
+ const focused=document.activeElement;
+ const editing=isEditableField(focused);
+ const vv=window.visualViewport;
+ const visibleHeight=vv?.height||window.innerHeight;
+ const visibleTop=vv?.offsetTop||0;
+ const keyboardSpace=Math.max(0,Math.round(window.innerHeight-visibleHeight-visibleTop));
+ document.body.classList.toggle('is-editing',editing);
+ document.documentElement.style.setProperty('--keyboard-inset',editing?keyboardSpace+'px':'0px');
+ document.documentElement.style.setProperty('--visible-viewport-height',Math.round(visibleHeight)+'px');
+ document.documentElement.style.setProperty('--visible-viewport-top',Math.round(visibleTop)+'px');
+ if(!editing)return;
+ const fieldRect=focused.getBoundingClientRect();
+ const margin=22;
+ const modal=focused.closest('.modal');
+ if(modal){
+  const modalRect=modal.getBoundingClientRect();
+  const safeTop=Math.max(visibleTop+margin,modalRect.top+margin);
+  const safeBottom=Math.min(visibleTop+visibleHeight-margin,modalRect.bottom-margin);
+  if(fieldRect.bottom>safeBottom)modal.scrollTop+=fieldRect.bottom-safeBottom;
+  else if(fieldRect.top<safeTop)modal.scrollTop+=fieldRect.top-safeTop;
+ }else{
+  const safeTop=visibleTop+margin;
+  const safeBottom=visibleTop+visibleHeight-margin;
+  if(fieldRect.bottom>safeBottom)window.scrollBy(0,Math.ceil(fieldRect.bottom-safeBottom));
+  else if(fieldRect.top<safeTop)window.scrollBy(0,Math.floor(fieldRect.top-safeTop));
+ }
+}
+function scheduleInputViewport(){
+ if(inputViewportFrame)cancelAnimationFrame(inputViewportFrame);
+ inputViewportFrame=requestAnimationFrame(()=>{
+  inputViewportFrame=0;
+  updateInputViewport();
+ });
+}
+function onEditorFocus(e){
+ if(!isEditableField(e.target))return;
+ document.body.classList.add('is-editing');
+ scheduleInputViewport();
+ setTimeout(scheduleInputViewport,120);
+ setTimeout(scheduleInputViewport,360);
+}
+function onEditorBlur(){
+ setTimeout(scheduleInputViewport,80);
+}
+
 function render(){const app=$('#app');if(!app)return;let body;
  switch(ui.view){case 'clients':body=renderClients();break;case 'dogs':body=renderDogs();break;case 'dog':body=renderDog();break;case 'appointments':body=renderAppointments();break;case 'goals':body=renderGoals();break;case 'progress':body=renderProgress();break;case 'journal':body=renderJournal();break;case 'settings':body=renderSettings();break;default:body=renderDashboard()}
- app.innerHTML=`<div class="layout">${sidebar()}<main class="main">${topbar()}<div class="content">${demoBanner()}${body}<p class="footer-hint">Percorso Cane v1.0.4 · nome provvisorio · prototipo funzionale per collaudo</p></div></main></div>${modalContents()}${ui.toast?`<div class="toast" role="status">${esc(ui.toast)}</div>`:''}`;
+ app.innerHTML=`<div class="layout">${sidebar()}<main class="main">${topbar()}<div class="content">${demoBanner()}${body}<p class="footer-hint">Percorso Cane v1.0.5 · nome provvisorio · prototipo funzionale per collaudo</p></div></main></div>${modalContents()}${ui.toast?`<div class="toast" role="status">${esc(ui.toast)}</div>`:''}`;
+ if(ui.view==='dog')requestAnimationFrame(alignSelectedDogTab);
 }
 function go(page){const valid=['dashboard','clients','dogs','dog','appointments','goals','progress','journal','settings'];if(!valid.includes(page))return;if(page==='clients'&&!isEducator())return;ui.view=page;ui.modal=null;render();window.scrollTo(0,0)}
 function setRole(role){ui.role=role==='client'?'client':'educator';ui.modal=null;ui.view='dashboard';ui.tab='identity';ui.appointmentFilter='all';chosenDog();render()}
@@ -177,6 +251,10 @@ async function onChange(e){const t=e.target;
  if(t.id==='dog-photo-file'&&t.files?.length){const d=chosenDog(),file=t.files[0];if(!d||!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>15_000_000){notify('Utilizza un’immagine JPG, PNG o WEBP inferiore a 15 MB.');return}try{const url=URL.createObjectURL(file),im=new Image();im.onload=()=>{const scale=Math.min(1,540/Math.max(im.width,im.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(im.width*scale));canvas.height=Math.max(1,Math.round(im.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(im,0,0,canvas.width,canvas.height);const data=canvas.toDataURL('image/jpeg',.76);URL.revokeObjectURL(url);if(data.length>850000){notify('Foto troppo grande per la memoria locale.');return}d.photo=data;save();ui.modal=null;notify('Foto aggiornata.');};im.onerror=()=>{URL.revokeObjectURL(url);notify('Immagine non leggibile.');};im.src=url}catch{notify('Non è stato possibile leggere la foto.')}return}
 }
 const app=document.querySelector('#app');app.addEventListener('click',onClick);app.addEventListener('submit',onSubmit);app.addEventListener('change',onChange);
+app.addEventListener('focusin',onEditorFocus);app.addEventListener('focusout',onEditorBlur);
+window.visualViewport?.addEventListener('resize',scheduleInputViewport);
+window.visualViewport?.addEventListener('scroll',scheduleInputViewport);
+window.addEventListener('resize',scheduleInputViewport);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ui.modal){ui.modal=null;render()}});
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 render();

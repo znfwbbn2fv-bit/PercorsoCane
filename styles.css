@@ -31,3 +31,32 @@
     font-size: 16px !important;
   }
 }
+
+
+/* 1.0.5 - selected canine tab remains visible in the horizontal tab strip. */
+@media (max-width:720px) {
+  .tabs { overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+  .tabs .tab { flex:0 0 auto; }
+}
+
+/* 1.0.5 - respect the iPhone visual viewport while typing in a form. */
+@media (max-width:720px) {
+  html { scroll-padding-bottom:28px; }
+  .field input,.field select,.field textarea { scroll-margin-bottom:24px; }
+  body.is-editing .sidebar { display:none; }
+  body.is-editing .layout { padding-bottom:24px; }
+  body.is-editing .content {
+    padding-bottom:calc(43px + max(var(--keyboard-inset,0px),40vh));
+  }
+  body.is-editing .modalback {
+    top:var(--visible-viewport-top,0px);
+    bottom:auto;
+    height:var(--visible-viewport-height,100dvh);
+    padding:12px;
+    align-items:flex-start;
+  }
+  body.is-editing .modal {
+    max-height:calc(var(--visible-viewport-height,100dvh) - 24px);
+    overscroll-behavior:contain;
+  }
+}
