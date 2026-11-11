@@ -1,4 +1,4 @@
-# Percorso Cane — PWA demo 1.0.1
+# Percorso Cane — PWA demo 1.0.2
 
 Prima versione dimostrativa per la gestione di percorsi educativi cinofili.
 
@@ -34,3 +34,5 @@ Per un uso professionale con clienti veri occorrono almeno: backend protetto, au
 ## Architettura
 
 Applicazione HTML/CSS/JavaScript senza build. Il service worker e il manifest utilizzano URL relativi, compatibili con la sottocartella `/PercorsoCane/` di GitHub Pages.
+## Aggiornamento 1.0.2
+Nella Panoramica i riquadri Clienti, Cani, Lezioni future e Da verificare sono pulsanti interattivi. Gli ultimi due aprono le prenotazioni con il filtro pertinente; puoi cambiare filtro anche dall'agenda.
