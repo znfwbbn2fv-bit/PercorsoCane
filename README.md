@@ -16,7 +16,7 @@ Prima versione dimostrativa per la gestione di percorsi educativi cinofili.
 1. Crea una repository chiamata `PercorsoCane` su GitHub. Se hai GitHub Free e vuoi usare GitHub Pages, impostala **Public**. Non inserire alcun dato reale di clienti nel codice o nella repository.
 2. Aggiungi **tutti i file di questa cartella direttamente nella radice** della repository (non caricare soltanto lo ZIP come file): `index.html`, `app.js`, `styles.css`, `manifest.webmanifest`, `sw.js`, icone, `.nojekyll` e questo `README.md`.
 3. Apri **Settings → Pages → Build and deployment**.
-4. In **Source**, scegli **Deploy from a branch**; seleziona `main` e `/(root)`, poi **Save**.
+4. In **Source**, scegli **GitHub Actions**. Il workflow `.github/workflows/pages.yml` è già configurato e pubblica automaticamente gli aggiornamenti di `main`.
 5. Una volta pubblicata, apri `https://<utente>.github.io/PercorsoCane/`.
 6. Su iPhone: apri il sito in Safari → Condividi → **Aggiungi alla schermata Home** → **Apri come app web**.
 7. Per il test offline: apri l'app online almeno una volta, poi attiva modalità aereo e riaprila. Verifica effettivamente anche backup e ripristino.
@@ -47,3 +47,6 @@ Corretto il pulsante Cliente/Educatore su iPhone: il comando viene riconosciuto 
 - Su iPhone e iPad l'interfaccia controlla l'area effettivamente visibile mentre si apre la tastiera e scorre per mostrare il campo attivo. La barra inferiore viene nascosta durante l'editing e i modali si adattano all'altezza visibile.
 - La barra orizzontale delle tab del cane si riposiziona per mantenere al centro la sezione selezionata, senza cambiare la pagina verticalmente.
 - La modifica non cambia la chiave di salvataggio dei dati locali e mantiene lo zoom manuale/accessibile.
+
+## Aggiornamento della versione su iPhone
+La pagina HTML richiede `app.js` e `styles.css` con parametro di versione (`?v=1.0.5`) per evitare che il browser conservi i vecchi file. La registrazione del service worker evita la cache HTTP del file `sw.js`. Per aggiornare senza perdere i dati, aprire il sito in Safari e ricaricare la pagina: **non cancellare l'app o i dati del sito senza aver prima esportato un backup JSON**. Per controllare il deployment vedere `Actions → Pubblica Percorso Cane su GitHub Pages` e verificare che il job sia concluso correttamente.

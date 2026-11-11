@@ -256,6 +256,6 @@ window.visualViewport?.addEventListener('resize',scheduleInputViewport);
 window.visualViewport?.addEventListener('scroll',scheduleInputViewport);
 window.addEventListener('resize',scheduleInputViewport);
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ui.modal){ui.modal=null;render()}});
-if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js', {updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
 render();
 })();
