@@ -72,3 +72,18 @@
  .topbar.client-mode .client-context{grid-column:1/-1;max-width:none;min-width:0}
  .topbar.client-mode .client-context select{min-height:44px;font-size:16px}
 }
+
+
+/* v1.0.7 — persistent role-scoped Dashboard notifications. */
+.notice-button{font-size:13px;min-width:44px;white-space:nowrap}
+.notice-center{margin-top:20px;scroll-margin-top:20px}
+.count-notice{display:inline-block;margin-left:5px;border-radius:999px;padding:3px 8px;background:#e7f2e8;color:#31564a;font-size:11px;font-weight:800}
+.notice-items{display:flex;flex-direction:column;gap:9px}
+.notice-entry{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px solid #ebefea;border-radius:12px;padding:13px;background:#fff}
+.notice-entry.unread{background:#f0f7f2;border-color:#b9d2c1;border-left:4px solid #4e8a70}
+.notice-details{min-width:0;flex:1}
+.notice-details strong{display:block;font-size:13px;color:#23483b}
+.notice-details p{margin:4px 0;color:#496255;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.notice-details small{font-size:10px;color:#7b8c81}
+.notice-entry .btn{flex:0 0 auto}
+@media(max-width:720px){.notice-center .sectionhead{align-items:flex-start;flex-wrap:wrap}.notice-entry{padding:11px}.notice-entry .btn{padding:9px}}
