@@ -60,3 +60,15 @@
     overscroll-behavior:contain;
   }
 }
+
+
+/* v1.0.6 — visible demo client switch on iPhone and desktop. */
+.client-context{display:flex;flex-direction:column;gap:4px;min-width:165px;max-width:260px}
+.client-context label{font-size:11px;color:#5e7468;font-weight:750}
+.client-context select{width:100%;max-width:100%;min-height:42px;border:1px solid #c9d9cd;border-radius:10px;padding:9px 11px;color:#23483b;background:#fffefb;font-size:16px}
+@media(max-width:720px){
+ .topbar.client-mode{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:8px;align-items:center}
+ .topbar.client-mode .top-right{justify-content:flex-end}
+ .topbar.client-mode .client-context{grid-column:1/-1;max-width:none;min-width:0}
+ .topbar.client-mode .client-context select{min-height:44px;font-size:16px}
+}

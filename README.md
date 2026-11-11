@@ -1,4 +1,4 @@
-# Percorso Cane — PWA demo 1.0.5
+# Percorso Cane — PWA demo 1.0.6
 
 Prima versione dimostrativa per la gestione di percorsi educativi cinofili.
 
@@ -34,19 +34,22 @@ Per un uso professionale con clienti veri occorrono almeno: backend protetto, au
 ## Architettura
 
 Applicazione HTML/CSS/JavaScript senza build. Il service worker e il manifest utilizzano URL relativi, compatibili con la sottocartella `/PercorsoCane/` di GitHub Pages.
-## Aggiornamento 1.0.5
+## Aggiornamento 1.0.6
 Nella Panoramica i riquadri Clienti, Cani, Lezioni future e Da verificare sono pulsanti interattivi. Gli ultimi due aprono le prenotazioni con il filtro pertinente; puoi cambiare filtro anche dall'agenda.
 
-## Correzione 1.0.5 — Safari su iPhone
+## Correzione 1.0.6 — Safari su iPhone
 Su iPhone/iPad i campi `input`, `select` e `textarea` utilizzano una dimensione del testo di almeno 16 px, evitando l'ingrandimento automatico della pagina alla messa a fuoco. Lo zoom manuale resta disponibile per accessibilità. La chiave dei dati locali non cambia.
 
-## Correzione 1.0.5 — Cambio modalità Cliente
+## Correzione 1.0.6 — Cambio modalità Cliente
 Corretto il pulsante Cliente/Educatore su iPhone: il comando viene riconosciuto anche quando l'attributo HTML è senza valore. Il cambio modalità riporta alla Panoramica e alla scheda Anagrafica. La scheda Piano professionale non è disponibile nella vista Cliente. Questa separazione è soltanto dimostrativa e non protegge dati sensibili.
 
-## Correzione 1.0.5 — Tastiera iPhone e navigazione scheda cane
+## Correzione 1.0.6 — Tastiera iPhone e navigazione scheda cane
 - Su iPhone e iPad l'interfaccia controlla l'area effettivamente visibile mentre si apre la tastiera e scorre per mostrare il campo attivo. La barra inferiore viene nascosta durante l'editing e i modali si adattano all'altezza visibile.
 - La barra orizzontale delle tab del cane si riposiziona per mantenere al centro la sezione selezionata, senza cambiare la pagina verticalmente.
 - La modifica non cambia la chiave di salvataggio dei dati locali e mantiene lo zoom manuale/accessibile.
 
 ## Aggiornamento della versione su iPhone
-La pagina HTML richiede `app.js` e `styles.css` con parametro di versione (`?v=1.0.5`) per evitare che il browser conservi i vecchi file. La registrazione del service worker evita la cache HTTP del file `sw.js`. Per aggiornare senza perdere i dati, aprire il sito in Safari e ricaricare la pagina: **non cancellare l'app o i dati del sito senza aver prima esportato un backup JSON**. Per controllare il deployment vedere `Actions → Pubblica Percorso Cane su GitHub Pages` e verificare che il job sia concluso correttamente.
+La pagina HTML richiede `app.js` e `styles.css` con parametro di versione (`?v=1.0.6`) per evitare che il browser conservi i vecchi file. La registrazione del service worker evita la cache HTTP del file `sw.js`. Per aggiornare senza perdere i dati, aprire il sito in Safari e ricaricare la pagina: **non cancellare l'app o i dati del sito senza aver prima esportato un backup JSON**. Per controllare il deployment vedere `Actions → Pubblica Percorso Cane su GitHub Pages` e verificare che il job sia concluso correttamente.
+
+## Correzione 1.0.6 — Accesso ai cani nella demo Cliente
+La modalità Cliente mostra sempre un selettore visibile nella barra superiore, anche da iPhone. Se l'educatore ha una scheda cane selezionata, passando a Cliente viene scelto automaticamente il proprietario del cane. La selezione manuale del cliente aggiorna l'elenco dei cani e porta alla Panoramica per la verifica. Questo non introduce account separati: è una simulazione.
