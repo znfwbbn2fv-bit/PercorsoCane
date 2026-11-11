@@ -21,3 +21,13 @@
     .toast { bottom: calc(84px + env(safe-area-inset-bottom)); }
   }
 }
+
+/* iOS Safari: prevent automatic focus zoom by keeping editable controls at >=16px.
+   This does not disable manual pinch-to-zoom or accessibility settings. */
+@supports (-webkit-touch-callout: none) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
