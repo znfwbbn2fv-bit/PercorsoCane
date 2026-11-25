@@ -87,3 +87,6 @@
 .notice-details small{font-size:10px;color:#7b8c81}
 .notice-entry .btn{flex:0 0 auto}
 @media(max-width:720px){.notice-center .sectionhead{align-items:flex-start;flex-wrap:wrap}.notice-entry{padding:11px}.notice-entry .btn{padding:9px}}
+
+/* v1.0.9: esplicita l'uscita dal form; un tap sullo sfondo non chiude la finestra. */
+.modal-exit-hint{font-size:11px;color:#657a6c;margin:12px 0 0;line-height:1.4}

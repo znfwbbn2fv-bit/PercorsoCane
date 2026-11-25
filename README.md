@@ -1,4 +1,4 @@
-# Percorso Cane — PWA demo 1.0.8
+# Percorso Cane — PWA demo 1.0.9
 
 Prima versione dimostrativa per la gestione di percorsi educativi cinofili.
 
@@ -34,28 +34,31 @@ Per un uso professionale con clienti veri occorrono almeno: backend protetto, au
 ## Architettura
 
 Applicazione HTML/CSS/JavaScript senza build. Il service worker e il manifest utilizzano URL relativi, compatibili con la sottocartella `/PercorsoCane/` di GitHub Pages.
-## Aggiornamento 1.0.8
+## Aggiornamento 1.0.9
 Nella Panoramica i riquadri Clienti, Cani, Lezioni future e Da verificare sono pulsanti interattivi. Gli ultimi due aprono le prenotazioni con il filtro pertinente; puoi cambiare filtro anche dall'agenda.
 
-## Correzione 1.0.8 — Safari su iPhone
+## Correzione 1.0.9 — Safari su iPhone
 Su iPhone/iPad i campi `input`, `select` e `textarea` utilizzano una dimensione del testo di almeno 16 px, evitando l'ingrandimento automatico della pagina alla messa a fuoco. Lo zoom manuale resta disponibile per accessibilità. La chiave dei dati locali non cambia.
 
-## Correzione 1.0.8 — Cambio modalità Cliente
+## Correzione 1.0.9 — Cambio modalità Cliente
 Corretto il pulsante Cliente/Educatore su iPhone: il comando viene riconosciuto anche quando l'attributo HTML è senza valore. Il cambio modalità riporta alla Panoramica e alla scheda Anagrafica. La scheda Piano professionale non è disponibile nella vista Cliente. Questa separazione è soltanto dimostrativa e non protegge dati sensibili.
 
-## Correzione 1.0.8 — Tastiera iPhone e navigazione scheda cane
+## Correzione 1.0.9 — Tastiera iPhone e navigazione scheda cane
 - Su iPhone e iPad l'interfaccia controlla l'area effettivamente visibile mentre si apre la tastiera e scorre per mostrare il campo attivo. La barra inferiore viene nascosta durante l'editing e i modali si adattano all'altezza visibile.
 - La barra orizzontale delle tab del cane si riposiziona per mantenere al centro la sezione selezionata, senza cambiare la pagina verticalmente.
 - La modifica non cambia la chiave di salvataggio dei dati locali e mantiene lo zoom manuale/accessibile.
 
 ## Aggiornamento della versione su iPhone
-La pagina HTML richiede `app.js` e `styles.css` con parametro di versione (`?v=1.0.8`) per evitare che il browser conservi i vecchi file. La registrazione del service worker evita la cache HTTP del file `sw.js`. Per aggiornare senza perdere i dati, aprire il sito in Safari e ricaricare la pagina: **non cancellare l'app o i dati del sito senza aver prima esportato un backup JSON**. Per controllare il deployment vedere `Actions → Pubblica Percorso Cane su GitHub Pages` e verificare che il job sia concluso correttamente.
+La pagina HTML richiede `app.js` e `styles.css` con parametro di versione (`?v=1.0.9`) per evitare che il browser conservi i vecchi file. La registrazione del service worker evita la cache HTTP del file `sw.js`. Per aggiornare senza perdere i dati, aprire il sito in Safari e ricaricare la pagina: **non cancellare l'app o i dati del sito senza aver prima esportato un backup JSON**. Per controllare il deployment vedere `Actions → Pubblica Percorso Cane su GitHub Pages` e verificare che il job sia concluso correttamente.
 
-## Correzione 1.0.8 — Accesso ai cani nella demo Cliente
+## Correzione 1.0.9 — Accesso ai cani nella demo Cliente
 La modalità Cliente mostra sempre un selettore visibile nella barra superiore, anche da iPhone. Se l'educatore ha una scheda cane selezionata, passando a Cliente viene scelto automaticamente il proprietario del cane. La selezione manuale del cliente aggiorna l'elenco dei cani e porta alla Panoramica per la verifica. Questo non introduce account separati: è una simulazione.
 
-## 1.0.8 — Notifiche Dashboard (demo locale)
+## 1.0.9 — Notifiche Dashboard (demo locale)
 Le due Dashboard includono un registro notifiche persistente con lettura e conteggio nuove. Gli eventi sono richiesta lezione → educatore; conferma o rifiuto → cliente; segnalazione di pagamento da parte del cliente → educatore; conferma manuale del pagamento da parte dell'educatore → cliente. La segnalazione del cliente non modifica lo stato in Pagato. Le notifiche vengono salvate assieme agli altri dati e incluse nel backup JSON; i vecchi backup restano importabili. Questa implementazione **non sincronizza dispositivi diversi** e **non invia notifiche push**. Per uso reale occorrono autenticazione dei ruoli, database sincronizzato, policy di accesso e notifiche server.
 
-## v1.0.8 — Persistenza client e controllo salvataggi
+## v1.0.9 — Persistenza client e controllo salvataggi
 Ora il cliente, il cane e il ruolo demo selezionati vengono mantenuti alla riapertura sullo stesso archivio locale. La creazione di un cliente conferma il successo solo dopo il salvataggio e una verifica di lettura. Eventuali errori vengono mostrati nell'interfaccia, e un archivio esistente non leggibile non viene sovrascritto automaticamente. In Impostazioni sono visibili il numero di clienti/cani, l'ultimo cliente selezionato e l'orario dell'ultimo salvataggio. L'aggiornamento non modifica la chiave localStorage, non cancella i dati precedenti e non aggiunge sincronizzazione tra browser o dispositivi.
+
+## v1.0.9 — Protezione moduli da chiusura accidentale
+Il tocco sullo sfondo scuro non chiude più le finestre di compilazione. Nella creazione disponibilità è disponibile un pulsante Annulla, oltre alla ×. Se il modulo è stato modificato, all'uscita volontaria viene richiesta conferma. Anche gli errori di validazione mostrano un messaggio senza ricreare il modulo e senza azzerare i dati già inseriti. La modifica mantiene la chiave localStorage e tutte le prenotazioni precedenti.
